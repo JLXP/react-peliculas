@@ -1,30 +1,21 @@
-import styles from './App.module.css';
-
-
 function App() {
 
-  const subtitulo = 'Este es otro subtitulo';
 
-  const duplicar = (valor:number)=> valor * 2;
-  const imagenURL = '/vite.svg';
+  const manejarClick = () => alert('click');
 
-  const cuadradoRojo = {
-    backgroundColor: 'red',
-    width: '50px',
-    height:'50px',
-    marginLeft: '1rem'
-  }
+  const manejarKeyUp = (e:React.KeyboardEvent<HTMLInputElement>)=> texto = e.currentTarget.value;
+  let texto = '';
 
   return (
     <>
       <h1 className="rojo">Hola Mundo</h1>
-      <div style={cuadradoRojo}></div>
-
-      <h3 className={styles.color}>{subtitulo.toUpperCase()}</h3>
-      <h4>El doble de 3 es {duplicar(3)}</h4>
-
-      <div style={cuadradoRojo}></div>
-      <img src={imagenURL} alt="logo vista"/>
+      <button onClick={manejarClick}>Clickeame</button>
+      <div>
+        <input onKeyUp={(e)=> manejarKeyUp(e)}/>
+      </div>
+      <div>
+        <p>Haz escrito: {texto}</p>
+      </div>
     </>
     
   )
