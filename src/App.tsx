@@ -1,10 +1,21 @@
+import { useState } from "react";
+
 function App() {
+
+  const [texto, setTexto] = useState('');
+
+  let texto2 = '';
+  console.log(texto2);
 
 
   const manejarClick = () => alert('click');
 
-  const manejarKeyUp = (e:React.KeyboardEvent<HTMLInputElement>)=> texto = e.currentTarget.value;
-  let texto = '';
+  const manejarKeyUp = (e:React.KeyboardEvent<HTMLInputElement>)=>
+  {
+    texto2 = e.currentTarget.value;
+    setTexto(e.currentTarget.value);
+  }
+    
 
   return (
     <>
