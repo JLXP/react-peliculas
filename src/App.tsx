@@ -15,6 +15,7 @@ function App() {
     texto2 = e.currentTarget.value;
     setTexto(e.currentTarget.value);
   }
+  //coment
     
 
   return (
