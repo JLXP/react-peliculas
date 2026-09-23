@@ -1,35 +1,16 @@
-import Cabecera from "./Cabecera";
-import ProyectarContenido from "./ProyectarContenido";
-import ProyectarContenido2 from "./ProyectarContenido2";
+import { useState } from "react";
+import ContenidoDinamico from "./ContenidoDinamico";
 
 export default function App() {
+
+  const [mostrar, setMostrar] = useState(false); 
     
 
   return (
     <>
-    <h2>Ejemplo 1</h2>
-      <ProyectarContenido>
-        <>
-          <button onClick={()=> alert('He sido clickeado')}>Clickeame</button>
-          <h4>Esto es un h4</h4>
-        </>
-      </ProyectarContenido>
-
-      <h2>Ejemplo 2</h2>
-
-      <ProyectarContenido2
-
-        parteSuperior={<button>Boton superior</button>}
-        parteIntermedia={<>
-          <Cabecera/>
-          <p>Lo que yo quiera</p>
-        </>}
-
-        parteInferior={<>
-        
-        </>}
-      
-      />
+        <input type="checkbox" onChange={e=> setMostrar(e.target.checked)}/>
+        <label>Mostrar el mensaje oculto</label>
+        <ContenidoDinamico mostrarContenido={ }/>
     </>
     
   )
