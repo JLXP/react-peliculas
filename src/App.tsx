@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Cabecera from "./Cabecera";
+import MostrarTexto from "./MostrarTexto";
 
 function App() {
 
@@ -20,14 +22,12 @@ function App() {
 
   return (
     <>
-      <h1 className="rojo">Hola Mundo</h1>
+    <Cabecera/>
       <button onClick={manejarClick}>Clickeame</button>
       <div>
         <input onKeyUp={(e)=> manejarKeyUp(e)}/>
       </div>
-      <div>
-        <p>Haz escrito: {texto}</p>
-      </div>
+    <MostrarTexto texto={texto} />
     </>
     
   )
