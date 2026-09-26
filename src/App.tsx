@@ -1,20 +1,18 @@
 import { useState } from "react";
-import ContenidoDinamicoIf from "./ContenidoDinamicoIf";
+import EjemploUseEffect from "./EjemploUseEffect";
 
 export default function App() {
-  const [calificacion, setCalificacion] = useState<number | null>(null);
+  const [mostrar, setMostrar] = useState(true);
 
   return (
     <>
-      <label>Ingrese la calificacion:</label>
       <input
-        type="number"
-        onChange={(e) => setCalificacion(Number(e.target.value))}
-      />
-
-      {calificacion ? (
-        <ContenidoDinamicoIf calificacion={calificacion} />
-      ) : undefined}
+        type="checkbox"
+        defaultChecked={mostrar}
+        onChange={(e) => setMostrar(e.target.checked)}
+      />{" "}
+      Mostrar componente
+      {mostrar ? <EjemploUseEffect /> : undefined}
     </>
   );
 }
