@@ -1,9 +1,9 @@
 import { memo, useCallback, useState } from "react";
 import FilaMemorizar from "./FilaMemorizar";
-import type Persona from '../persona.model';
+import type Persona from "../persona.model";
+import { ErrorBoundary } from "react-error-boundary";
 
-
-const TablaMemorizar =  memo( function TablaMemorizar() {
+const TablaMemorizar = memo(function TablaMemorizar() {
   const personasFuentes: Persona[] = [
     { id: 1, nombre: "Felipe", departamento: "Ingenieria" },
     { id: 2, nombre: "Ana", departamento: "Contabilidad" },
@@ -20,8 +20,10 @@ const TablaMemorizar =  memo( function TablaMemorizar() {
   const [personas, setPersonas] = useState(personasFuentes);
 
   const removerPersona = useCallback((persona: Persona) => {
-    setPersonas(estadoActual => estadoActual.filter(p=>p.id !== persona.id));
-  },[]);
+    setPersonas((estadoActual) =>
+      estadoActual.filter((p) => p.id !== persona.id),
+    );
+  }, []);
 
   return (
     <table>
@@ -34,7 +36,15 @@ const TablaMemorizar =  memo( function TablaMemorizar() {
       </thead>
       <tbody>
         {personas.map((p) => (
-          <FilaMemorizar key={p.id} persona={p} remover={removerPersona}/>
+          <ErrorBoundary key={p.id} fallback={
+            <>
+              <tr>
+                <td colSpan={3} style={{color:'red'}}>--Error:{p.nombre}</td>
+              </tr>
+            </>
+          }>
+            <FilaMemorizar persona={p} remover={removerPersona} />
+          </ErrorBoundary>
         ))}
       </tbody>
     </table>
