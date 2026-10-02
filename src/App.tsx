@@ -1,10 +1,10 @@
-import EjemploUseContext from "./EjemploUseContext";
+import EjemploMemorizar from "./EjemploMemorizar";
 
 export default function App() {
 
   return (
     <>
-      <EjemploUseContext />
+      <EjemploMemorizar />
     </>
   );
 }
