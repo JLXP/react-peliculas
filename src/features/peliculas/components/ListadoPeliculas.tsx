@@ -1,21 +1,18 @@
 import type Pelicula from "../models/pelicula.model";
 import PeliculaIndividual from "./PeliculaIndividual";
 import styles from "./ListadoPeliculas.module.css";
+import ListadoGenerico from "../../../components/ListadoGenerico";
 
 export default function ListadoPeliculas(props: ListadoPeliculasProps) {
-  if (!props.peliculas) {
-    return "Cargando...";
-  } else if (props.peliculas.length === 0) {
-    return "No existen peliculas para mostrar";
-  } else {
-    return (
+  return (
+    <ListadoGenerico<Pelicula> listado={props.peliculas} listadoVacioUI={<>No hay peliculas para mostrar</>}>
       <div className={styles.div}>
         {props.peliculas?.map((pelicula) => (
           <PeliculaIndividual key={pelicula.id} pelicula={pelicula} />
         ))}
       </div>
-    );
-  }
+    </ListadoGenerico>
+  );
 }
 
 interface ListadoPeliculasProps {
