@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ListadoPeliculas from "./features/peliculas/components/ListadoPeliculas";
 import type Pelicula from "./features/peliculas/models/pelicula.model";
+import Boton from "./components/Boton";
 
 export default function App() {
   const [peliculas, setPeliculas] = useState<AppsState>({});
@@ -37,11 +38,14 @@ export default function App() {
 
   return (
     <>
-      <h3>En Cines</h3>
-      <ListadoPeliculas peliculas={peliculas.enCines} />
+      <div className="container">
+        <Boton>Mi boton de prueba</Boton>
+        <h3>En Cines</h3>
+        <ListadoPeliculas peliculas={peliculas.enCines} />
 
-      <h3>Proximos Estrenos</h3>
-      <ListadoPeliculas peliculas={peliculas.proximosEstrenos} />
+        <h3>Proximos Estrenos</h3>
+        <ListadoPeliculas peliculas={peliculas.proximosEstrenos} />
+      </div>
     </>
   );
 }
