@@ -1,7 +1,8 @@
+import Cargando from "./Cargando";
 
 export default function ListadoGenerico<T>(props: ListadoGenericoProps<T>){
     if(!props.listado){
-        return props.cargandoUI ? props.listadoVacioUI : 'Cargando'
+        return props.cargandoUI ? props.listadoVacioUI : <Cargando/>
     }
     else if(props.listado.length === 0){
         return props.listadoVacioUI ? props.listadoVacioUI : 'No hay elementos para mostrar';
