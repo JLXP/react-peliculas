@@ -1,7 +1,6 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter } from "react-router";
 import Menu from "./components/Menu";
-import LandingPage from "./features/home/components/LandingPage";
-import IndiceGeneros from "./features/generos/components/IndiceGeneros";
+import AppRoutes from "./AppRoutes";
 
 export default function App() {
   return (
@@ -9,11 +8,7 @@ export default function App() {
       <BrowserRouter>
         <Menu />
         <div className="container">
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/generos" element={<IndiceGeneros />} />
-            <Route />
-          </Routes>
+          <AppRoutes />
         </div>
       </BrowserRouter>
     </>
