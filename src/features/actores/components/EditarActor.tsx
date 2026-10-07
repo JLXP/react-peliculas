@@ -1,6 +1,12 @@
+import { useParams } from "react-router";
+
 const EditarActor = () => {
+  const { id } = useParams();
   return (
-    <div>EditarActor</div>
-  )
-}
-export default EditarActor
+    <>
+      <h3>Editar Actor</h3>
+      <p>El id es {id}</p>
+    </>
+  );
+};
+export default EditarActor;
