@@ -1,11 +1,23 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import Boton from "../../../components/Boton";
 import { NavLink } from "react-router";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const CrearGenero = () => {
-  const { register, handleSubmit } = useForm<FormType>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting },
+  } = useForm<FormType>({
+    resolver: yupResolver(reglasDeValidacion),
+    mode: "onChange",
+  });
 
-  const onSubmit: SubmitHandler<FormType> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<FormType> = async (data) => {
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    console.log(data);
+  };
 
   return (
     <>
@@ -18,9 +30,12 @@ const CrearGenero = () => {
             className="form-control"
             {...register("nombre")}
           />
+          {errors.nombre && <p className="error">{errors.nombre.message}</p>}
         </div>
         <div className="mt-2">
-          <Boton type="submit">Enviar</Boton>
+          <Boton type="submit" disabled={!isValid || isSubmitting}>
+            {isSubmitting ? 'Enviando...':'Enviar'}
+          </Boton>
           <NavLink to="/generos" className="btn btn-secondary ms-2">
             Cancelar
           </NavLink>
@@ -34,3 +49,7 @@ export default CrearGenero;
 interface FormType {
   nombre: string;
 }
+
+const reglasDeValidacion = yup.object({
+  nombre: yup.string().required("El nombre es obligatorio"),
+});
