@@ -3,6 +3,7 @@ import Boton from "../../../components/Boton";
 import { NavLink } from "react-router";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { primeraLetraMayuscula } from "../../../validaciones/Validaciones";
 
 const CrearGenero = () => {
   const {
@@ -51,5 +52,5 @@ interface FormType {
 }
 
 const reglasDeValidacion = yup.object({
-  nombre: yup.string().required("El nombre es obligatorio"),
+  nombre: yup.string().required("El nombre es obligatorio").test(primeraLetraMayuscula()),
 });
