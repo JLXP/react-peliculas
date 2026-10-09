@@ -17,7 +17,7 @@ const EditarActor = () => {
 
   useEffect(()=>{
     const timerId = setTimeout(()=>{
-      setModelo({nombre: 'Tom' + id, fechaNacimiento:'2022-11-23'})
+      setModelo({nombre: 'Tom' + id, fechaNacimiento:'2022-11-23' , foto:'https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/TomHolland-byPhilipRomano.jpg/960px-TomHolland-byPhilipRomano.jpg?utm_source=es.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail'})
     },1000)
     return () => clearTimeout(timerId);
   })
