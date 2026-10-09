@@ -8,6 +8,7 @@ import {
   primeraLetraMayuscula,
 } from "../../../validaciones/Validaciones";
 import { yupResolver } from "@hookform/resolvers/yup";
+import SeleccionarImagen from "../../../components/SeleccionarImagen";
 
 export default function FormularioActor(props: FormularioActorProps) {
   const {
@@ -46,6 +47,11 @@ export default function FormularioActor(props: FormularioActorProps) {
           <p className="error">{errors.fechaNacimiento.message}</p>
         )}
       </div>
+      <SeleccionarImagen
+        label="Foto"
+        imagenURL=""
+        imagenSeleccionada={() => {}}
+      />
       <div className="mt-2">
         <Boton type="submit" disabled={!isValid || isSubmitting}>
           {isSubmitting ? "Enviando..." : "Enviar"}
