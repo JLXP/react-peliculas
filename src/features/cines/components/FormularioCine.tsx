@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Boton from "../../../components/Boton";
 import { NavLink } from "react-router";
+import Mapa from "../../../components/Mapa/Mapa";
 
 export default function FormularioCine(props: FormularioCineProps) {
   const {
@@ -30,6 +31,9 @@ export default function FormularioCine(props: FormularioCineProps) {
             {...register("nombre")}
           />
           {errors.nombre && <p className="error">{errors.nombre.message}</p>}
+        </div>
+        <div className="mt-4">
+          <Mapa/>
         </div>
         <div className="mt-2">
           <Boton type="submit" disabled={!isValid || isSubmitting}>

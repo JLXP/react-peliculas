@@ -6,7 +6,7 @@ const IndiceCines = () => {
   return (
     <>
       <div>Cines</div>
-      <Boton onClick={() => navigate("/actores/crear")}>Crear Actor</Boton>
+      <Boton onClick={() => navigate("/cines/crear")}>Crear Cines</Boton>
     </>
   );
 };
