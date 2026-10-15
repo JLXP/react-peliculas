@@ -9,6 +9,7 @@ import SelectorMultiple from '../../../components/SelectorMultiple/SelectorMulti
 import type Genero from "../../generos/models/Genero.model";
 import type SelectorMultipleModel from "../../../components/SelectorMultiple/SelectorMultiple.model";
 import { useState } from "react";
+import type Cine from "../../cines/models/Cine.model";
 
 export default function FormularioPelicula(props: FormularioPeliculaProps) {
   const {
@@ -32,9 +33,12 @@ export default function FormularioPelicula(props: FormularioPeliculaProps) {
 
   const [generosSeleccionados, setGenerosSeleccionados] = useState(mapear(props.generosSeleccionados));
   const [generosNoSeleccionados, setGenerosNoSeleccionados] = useState(mapear(props.generosNoSeleccionados));
+  const [cinesSeleccionados, setCinesSeleccionados] = useState(mapear(props.cinesSeleccionados));
+  const [cinesNoSeleccionados, setCinesNoSeleccionados] = useState(mapear(props.cinesNoSeleccionados));
 
   const onSubmit: SubmitHandler<PeliculaCreacion> = (data) => {
     data.generosIds = generosSeleccionados.map(x=> x.llave);
+    data.cinesIds = cinesSeleccionados.map(x=>x.llave);
 
     props.onSubmit(data);
   }
@@ -91,6 +95,13 @@ export default function FormularioPelicula(props: FormularioPeliculaProps) {
             setGenerosNoSeleccionados(noSeleccionados)
           }}/>
         </div>
+         <div className="form-group">
+          <label>Cines:</label>
+          <SelectorMultiple seleccionados={cinesSeleccionados} noSeleccionados={cinesNoSeleccionados} onChange={(seleccionados, noSeleccionados)=>{
+            setCinesSeleccionados(seleccionados)
+            setCinesNoSeleccionados(noSeleccionados)
+          }}/>
+        </div>
         <div className="mt-2">
           <Boton type="submit" disabled={!isValid || isSubmitting}>{isSubmitting ? "Enviando" : "Enviar"}</Boton>
           <NavLink to="/" className="btn btn-secondary ms-2">Cancelar</NavLink>
@@ -105,6 +116,8 @@ interface FormularioPeliculaProps {
   onSubmit: SubmitHandler<PeliculaCreacion>;
   generosSeleccionados: Genero[];
   generosNoSeleccionados: Genero[];
+  cinesSeleccionados: Cine[];
+  cinesNoSeleccionados: Cine[];
 }
 
 const reglasDeValidacion = yup.object({
