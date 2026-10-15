@@ -1,4 +1,5 @@
 import type SelectorMultipleModel from "./SelectorMultiple.model";
+import styles from './SelectorMultiple.module.css';
 
 export default function SelectorMultiple(props: SelectorMultipleProps) {
   const seleccionar = (item: SelectorMultipleModel) => {
@@ -30,7 +31,7 @@ export default function SelectorMultiple(props: SelectorMultipleProps) {
   };
 
   return (
-    <div>
+    <div className={styles.div}>
       <ul>
         {props.noSeleccionados.map((item) => (
           <li key={item.llave} onClick={() => seleccionar(item)}>
@@ -38,7 +39,7 @@ export default function SelectorMultiple(props: SelectorMultipleProps) {
           </li>
         ))}
       </ul>
-      <div>
+      <div className={styles.botones}>
         <button type="button" onClick={seleccionarTodo}>
           {">>"}
         </button>

@@ -4,6 +4,7 @@ import type PeliculaCreacion from "../models/PeliculaCreacion.model";
 import FormularioPelicula from "./FormularioPelicula";
 import type { SubmitHandler } from "react-hook-form";
 import Cargando from "../../../components/Cargando";
+import type Genero from "../../generos/models/Genero.model";
 
 const EditarPelicula = () => {
   const [modelo, setModelo] = useState<PeliculaCreacion | undefined>(undefined);
@@ -26,11 +27,18 @@ const EditarPelicula = () => {
     console.log(data);
   };
 
+   const generosSeleccionados: Genero[] = [{ id: 2, nombre: "Drama" },];
+    const generoNoSeleccionados: Genero[] = [
+      { id: 1, nombre: "Accion" },
+      
+      { id: 3, nombre: "Comedia" },
+    ];
+
   return (
     <>
       <h3>Editar Pelicula</h3>
       {modelo ? (
-        <FormularioPelicula modelo={modelo} onSubmit={onSubmit} />
+        <FormularioPelicula modelo={modelo} onSubmit={onSubmit} generosNoSeleccionados={generoNoSeleccionados} generosSeleccionados={generosSeleccionados}/>
       ) : (
         <Cargando />
       )}
