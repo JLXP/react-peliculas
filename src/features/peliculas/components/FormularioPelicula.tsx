@@ -5,11 +5,12 @@ import * as yup from "yup";
 import SeleccionarImagen from "../../../components/SeleccionarImagen";
 import Boton from "../../../components/Boton";
 import { NavLink } from "react-router";
-import SelectorMultiple from '../../../components/SelectorMultiple/SelectorMultiple';
+import SelectorMultiple from "../../../components/SelectorMultiple/SelectorMultiple";
 import type Genero from "../../generos/models/Genero.model";
 import type SelectorMultipleModel from "../../../components/SelectorMultiple/SelectorMultiple.model";
 import { useState } from "react";
 import type Cine from "../../cines/models/Cine.model";
+import TypeaheadActores from "./TypeaheadActores";
 
 export default function FormularioPelicula(props: FormularioPeliculaProps) {
   const {
@@ -23,25 +24,37 @@ export default function FormularioPelicula(props: FormularioPeliculaProps) {
     defaultValues: props.modelo ?? { titulo: "" },
   });
 
-  const imagenActual: string | undefined = props.modelo?.poster ? props.modelo.poster as string : undefined;
+  const imagenActual: string | undefined = props.modelo?.poster
+    ? (props.modelo.poster as string)
+    : undefined;
 
-  const mapear = (arreglo: {id:number, nombre: string}[]): SelectorMultipleModel[] => {
-    return arreglo.map(valor => {
-        return { llave: valor.id, descripcion: valor.nombre }
+  const mapear = (
+    arreglo: { id: number; nombre: string }[],
+  ): SelectorMultipleModel[] => {
+    return arreglo.map((valor) => {
+      return { llave: valor.id, descripcion: valor.nombre };
     });
-  }
+  };
 
-  const [generosSeleccionados, setGenerosSeleccionados] = useState(mapear(props.generosSeleccionados));
-  const [generosNoSeleccionados, setGenerosNoSeleccionados] = useState(mapear(props.generosNoSeleccionados));
-  const [cinesSeleccionados, setCinesSeleccionados] = useState(mapear(props.cinesSeleccionados));
-  const [cinesNoSeleccionados, setCinesNoSeleccionados] = useState(mapear(props.cinesNoSeleccionados));
+  const [generosSeleccionados, setGenerosSeleccionados] = useState(
+    mapear(props.generosSeleccionados),
+  );
+  const [generosNoSeleccionados, setGenerosNoSeleccionados] = useState(
+    mapear(props.generosNoSeleccionados),
+  );
+  const [cinesSeleccionados, setCinesSeleccionados] = useState(
+    mapear(props.cinesSeleccionados),
+  );
+  const [cinesNoSeleccionados, setCinesNoSeleccionados] = useState(
+    mapear(props.cinesNoSeleccionados),
+  );
 
   const onSubmit: SubmitHandler<PeliculaCreacion> = (data) => {
-    data.generosIds = generosSeleccionados.map(x=> x.llave);
-    data.cinesIds = cinesSeleccionados.map(x=>x.llave);
+    data.generosIds = generosSeleccionados.map((x) => x.llave);
+    data.cinesIds = cinesSeleccionados.map((x) => x.llave);
 
     props.onSubmit(data);
-  }
+  };
 
   return (
     <>
@@ -90,21 +103,38 @@ export default function FormularioPelicula(props: FormularioPeliculaProps) {
 
         <div className="form-group">
           <label>Generos:</label>
-          <SelectorMultiple seleccionados={generosSeleccionados} noSeleccionados={generosNoSeleccionados} onChange={(seleccionados, noSeleccionados)=>{
-            setGenerosSeleccionados(seleccionados)
-            setGenerosNoSeleccionados(noSeleccionados)
-          }}/>
+          <SelectorMultiple
+            seleccionados={generosSeleccionados}
+            noSeleccionados={generosNoSeleccionados}
+            onChange={(seleccionados, noSeleccionados) => {
+              setGenerosSeleccionados(seleccionados);
+              setGenerosNoSeleccionados(noSeleccionados);
+            }}
+          />
         </div>
-         <div className="form-group">
+        <div className="form-group">
           <label>Cines:</label>
-          <SelectorMultiple seleccionados={cinesSeleccionados} noSeleccionados={cinesNoSeleccionados} onChange={(seleccionados, noSeleccionados)=>{
-            setCinesSeleccionados(seleccionados)
-            setCinesNoSeleccionados(noSeleccionados)
-          }}/>
+          <SelectorMultiple
+            seleccionados={cinesSeleccionados}
+            noSeleccionados={cinesNoSeleccionados}
+            onChange={(seleccionados, noSeleccionados) => {
+              setCinesSeleccionados(seleccionados);
+              setCinesNoSeleccionados(noSeleccionados);
+            }}
+          />
         </div>
+
+        <div className="form-group">
+          <TypeaheadActores />
+        </div>
+
         <div className="mt-2">
-          <Boton type="submit" disabled={!isValid || isSubmitting}>{isSubmitting ? "Enviando" : "Enviar"}</Boton>
-          <NavLink to="/" className="btn btn-secondary ms-2">Cancelar</NavLink>
+          <Boton type="submit" disabled={!isValid || isSubmitting}>
+            {isSubmitting ? "Enviando" : "Enviar"}
+          </Boton>
+          <NavLink to="/" className="btn btn-secondary ms-2">
+            Cancelar
+          </NavLink>
         </div>
       </form>
     </>
