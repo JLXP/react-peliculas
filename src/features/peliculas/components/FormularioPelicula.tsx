@@ -11,6 +11,7 @@ import type SelectorMultipleModel from "../../../components/SelectorMultiple/Sel
 import { useState } from "react";
 import type Cine from "../../cines/models/Cine.model";
 import TypeaheadActores from "./TypeaheadActores";
+import type ActorPelicula from "../models/ActorPelicula.model";
 
 export default function FormularioPelicula(props: FormularioPeliculaProps) {
   const {
@@ -48,10 +49,14 @@ export default function FormularioPelicula(props: FormularioPeliculaProps) {
   const [cinesNoSeleccionados, setCinesNoSeleccionados] = useState(
     mapear(props.cinesNoSeleccionados),
   );
+  const [actoresSeleccionados, setActoresSeleccionados] = useState(
+    props.actoresSeleccionados,
+  );
 
   const onSubmit: SubmitHandler<PeliculaCreacion> = (data) => {
     data.generosIds = generosSeleccionados.map((x) => x.llave);
     data.cinesIds = cinesSeleccionados.map((x) => x.llave);
+    data.actores = actoresSeleccionados;
 
     props.onSubmit(data);
   };
@@ -125,7 +130,23 @@ export default function FormularioPelicula(props: FormularioPeliculaProps) {
         </div>
 
         <div className="form-group">
-          <TypeaheadActores />
+          <TypeaheadActores
+            actores={actoresSeleccionados}
+            onAdd={(actores) => {
+              setActoresSeleccionados(actores);
+            }}
+            onRemove={(actor) => {
+              const actores = actoresSeleccionados.filter((x) => x !== actor);
+              setActoresSeleccionados(actores);
+            }}
+            onCambioPersonaje={(id, personaje) => {
+              const indice = actoresSeleccionados.findIndex((x) => x.id === id);
+
+              const actores = [...actoresSeleccionados];
+              actores[indice].personaje = personaje;
+              setActoresSeleccionados(actores);
+            }}
+          />
         </div>
 
         <div className="mt-2">
@@ -148,6 +169,7 @@ interface FormularioPeliculaProps {
   generosNoSeleccionados: Genero[];
   cinesSeleccionados: Cine[];
   cinesNoSeleccionados: Cine[];
+  actoresSeleccionados: ActorPelicula[];
 }
 
 const reglasDeValidacion = yup.object({

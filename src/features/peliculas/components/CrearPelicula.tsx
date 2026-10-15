@@ -33,6 +33,7 @@ const CrearPelicula = () => {
         generosNoSeleccionados={generoNoSeleccionados}
         cinesSeleccionados={cinesSeleccionados}
         cinesNoSeleccionados={cinesNoSeleccioandos}
+        actoresSeleccionados={[]}
       />
     </>
   );

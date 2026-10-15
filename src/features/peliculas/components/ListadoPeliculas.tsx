@@ -1,4 +1,4 @@
-import type Pelicula from "../models/pelicula.model";
+import type Pelicula from "../models/Pelicula.model";
 import PeliculaIndividual from "./PeliculaIndividual";
 import styles from "./ListadoPeliculas.module.css";
 import ListadoGenerico from "../../../components/ListadoGenerico";

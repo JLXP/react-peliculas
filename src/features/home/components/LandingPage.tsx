@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ListadoPeliculas from "../../peliculas/components/ListadoPeliculas";
-import type Pelicula from "../../peliculas/models/pelicula.model";
+import type Pelicula from "../../peliculas/models/Pelicula.model";
 
 export default function LandingPage() {
   const [peliculas, setPeliculas] = useState<AppsState>({});

@@ -1,4 +1,4 @@
-import type Pelicula from "../models/pelicula.model";
+import type Pelicula from "../models/Pelicula.model";
 import styles from './PeliculaIndividual.module.css'
 
 export default function PeliculaIndividual(props: PeliculaIndividualProps){

@@ -6,6 +6,7 @@ import type { SubmitHandler } from "react-hook-form";
 import Cargando from "../../../components/Cargando";
 import type Genero from "../../generos/models/Genero.model";
 import type Cine from "../../cines/models/Cine.model";
+import type ActorPelicula from "../models/ActorPelicula.model";
 
 const EditarPelicula = () => {
   const [modelo, setModelo] = useState<PeliculaCreacion | undefined>(undefined);
@@ -42,6 +43,15 @@ const EditarPelicula = () => {
     { id: 2, nombre: "Sambil", latitud: 0, longitud: 0 },
   ];
 
+  const actoresSeleccionados: ActorPelicula[] = [
+    {
+      id: 1,
+      nombre: "Tom Holland",
+      personaje: "Spider man",
+      foto: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/TomHolland-byPhilipRomano.jpg/960px-TomHolland-byPhilipRomano.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    },
+  ]
+
   return (
     <>
       <h3>Editar Pelicula</h3>
@@ -53,6 +63,7 @@ const EditarPelicula = () => {
           generosSeleccionados={generosSeleccionados}
           cinesSeleccionados={cinesSeleccionados}
           cinesNoSeleccionados={cinesNoSeleccioandos}
+          actoresSeleccionados={actoresSeleccionados}
         />
       ) : (
         <Cargando />

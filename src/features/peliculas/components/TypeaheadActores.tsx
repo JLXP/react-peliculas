@@ -2,7 +2,7 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import type ActorPelicula from "../models/ActorPelicula.model";
 import type { Option } from "react-bootstrap-typeahead/types/types";
 
-export default function TypeaheadActores() {
+export default function TypeaheadActores(props: TypeaheadActores) {
   const actores: ActorPelicula[] = [
     {
       id: 1,
@@ -31,7 +31,14 @@ export default function TypeaheadActores() {
       <label>Actores</label>
       <Typeahead
         id="typeahead"
-        onChange={(actores: Option[]) => {}}
+        onChange={(actores: Option[]) => {
+          const actorSeleccionado = actores[0] as ActorPelicula;
+          if (
+            props.actores.findIndex((x) => x.id === actorSeleccionado.id) === -1
+          ) {
+            props.onAdd([...props.actores, actorSeleccionado]);
+          }
+        }}
         labelKey={(opcion: Option) => {
           const actor = opcion as ActorPelicula;
           return actor.nombre;
@@ -60,6 +67,47 @@ export default function TypeaheadActores() {
           );
         }}
       />
+
+      <ul className="list-group">
+        {props.actores.map((actor) => (
+          <li
+            className="list-group-item d-flex align-items-center"
+            key={actor.id}
+          >
+            <div style={{ width: "70px" }}>
+              <img style={{ height: "60px" }} src={actor.foto} alt="foto" />
+            </div>
+            <div style={{ width: "150px", marginLeft: "1rem" }}>
+              {actor.nombre}
+            </div>
+            <div className="flex-grow-1 mx-3">
+              <input
+                className="form-control"
+                placeholder="Personaje"
+                type="text"
+                value={actor.personaje}
+                onChange={(e) =>
+                  props.onCambioPersonaje(actor.id, e.currentTarget.value)
+                }
+              />
+            </div>
+            <span
+              role="button"
+              className="badge text-bg-secondary"
+              onClick={() => props.onRemove(actor)}
+            >
+              X
+            </span>
+          </li>
+        ))}
+      </ul>
     </>
   );
+}
+
+interface TypeaheadActores {
+  actores: ActorPelicula[];
+  onAdd(actores: ActorPelicula[]): void;
+  onCambioPersonaje(id: number, personaje: string): void;
+  onRemove(actor: ActorPelicula): void;
 }
