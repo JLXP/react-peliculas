@@ -1,14 +1,13 @@
 import { useNavigate } from "react-router";
 import Boton from "../../../components/Boton";
 import { useEffect } from "react";
-import axios from "axios";
+import clienteAPI from "../../../api/clienteAxios";
 
 export default function IndiceGeneros() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("http://localhost:7256/api/generos")
+    clienteAPI.get(`/generos`)
       .then((res) => console.log(res.data));
   }, []);
 
