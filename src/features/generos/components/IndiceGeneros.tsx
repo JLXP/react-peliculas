@@ -6,9 +6,11 @@ import axios from "axios";
 export default function IndiceGeneros() {
   const navigate = useNavigate();
 
-  useEffect(()=>{
-    axios.get('http://localhost:7256/api/generos').then(res=>console.log( res.data));
-  },[])
+  useEffect(() => {
+    axios
+      .get("http://localhost:7256/api/generos")
+      .then((res) => console.log(res.data));
+  }, []);
 
   return (
     <>
