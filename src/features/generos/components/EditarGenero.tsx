@@ -27,7 +27,7 @@ const EditarGenero = () => {
     <>
       <h3>Editar Genero</h3>
       {modelo ? (
-        <FormularioGenero modelo={modelo} onSubmit={onSubmit} />
+        <FormularioGenero errores={[]} modelo={modelo} onSubmit={onSubmit} />
       ) : (
         <Cargando />
       )}
