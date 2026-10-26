@@ -1,14 +1,15 @@
 import {  type SubmitHandler } from "react-hook-form";
 import type GeneroCreacion from "../models/GeneracionCreacion.model";
 import FormularioGenero from "./FormularioGenero";
+import clienteAPI from "../../../api/clienteAxios";
+import { useNavigate } from "react-router";
 
 const CrearGenero = () => {
   
+  const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<GeneroCreacion> = async (data) => {
-    console.log('creando el genero...')
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log(data);
+    clienteAPI.post('/generos',data).then(()=> navigate('/generos'));
   };
 
   return (
