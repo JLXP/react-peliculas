@@ -1,33 +1,43 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import type GeneroCreacion from "../models/GeneracionCreacion.model";
 import FormularioGenero from "./FormularioGenero";
 import type { SubmitHandler } from "react-hook-form";
 import Cargando from "../../../components/Cargando";
+import clienteAPI from "../../../api/clienteAxios";
+import type Genero from "../models/Genero.model";
+import { extraerErrores } from "../../../utilidades/extraerErrores";
+import type { AxiosError } from "axios";
 
 const EditarGenero = () => {
   const { id } = useParams();
   const [modelo, setModelo] = useState<GeneroCreacion | undefined>(undefined);
+  const navigate = useNavigate();
+  const [errores, setErrores] = useState<string[]>([]); 
 
   useEffect(() => {
-    const timerId = setTimeout(() => {
-      setModelo({ nombre: "Drama" + id });
-    }, 1000);
-
-    return () => clearTimeout(timerId);
-  }, [id]);
+    clienteAPI.get<Genero>(`/genero/${id}`).then(res=>setModelo(res.data)).catch(
+      () => navigate('/genero')
+    );
+  }, [id, navigate]);
 
   const onSubmit: SubmitHandler<GeneroCreacion> = async (data) => {
-    console.log("Editando el genero...");
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log(data);
+    
+    try{
+      await clienteAPI.put(`/genero/${id}`,data);
+      navigate('/genero');
+    }catch(err){
+      const errores = extraerErrores(err as AxiosError)
+      setErrores(errores);
+    }
+
   };
 
   return (
     <>
       <h3>Editar Genero</h3>
       {modelo ? (
-        <FormularioGenero errores={[]} modelo={modelo} onSubmit={onSubmit} />
+        <FormularioGenero errores={errores} modelo={modelo} onSubmit={onSubmit} />
       ) : (
         <Cargando />
       )}
