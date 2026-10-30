@@ -4,6 +4,8 @@ import ListadoGenerico from "../../../components/ListadoGenerico";
 import Paginacion from "../../../components/Paginacion";
 import Cargando from "../../../components/Cargando";
 import { useGeneros } from "../hooks/useGeneros";
+import clienteAPI from "../../../api/clienteAxios";
+import confirmar from "../../../utilidades/confirmar";
 
 export default function IndiceGeneros() {
   const navigate = useNavigate();
@@ -15,7 +17,22 @@ export default function IndiceGeneros() {
     setPagina,
     setRecordsPorPagina,
     generos,
-  }= useGeneros();
+    cargarRegistros,
+  } = useGeneros();
+
+  const Borrar = async (id: number) => {
+    try {
+      await clienteAPI.delete(`/generos/${id}`);
+
+      if (pagina === 1) {
+        cargarRegistros();
+      } else {
+        setPagina(1);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -62,7 +79,10 @@ export default function IndiceGeneros() {
                       >
                         <i className="bi bi-pencil me-1"></i>Editar
                       </Boton>
-                      <Boton className="btn btn-sm btn-outline-danger">
+                      <Boton
+                        onClick={() => confirmar(() => Borrar(genero.id))}
+                        className="btn btn-sm btn-outline-danger"
+                      >
                         <i className="bi bi-trash"></i>Borrar
                       </Boton>
                     </td>
