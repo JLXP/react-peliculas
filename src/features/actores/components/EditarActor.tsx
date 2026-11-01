@@ -26,7 +26,7 @@ const EditarActor = () => {
   return (
     <>
       <h3>Editar Actor</h3>
-      {modelo? <FormularioActor modelo={modelo} onSubmit={onSubmit} />: <Cargando/>}
+      {modelo? <FormularioActor errores={[]} modelo={modelo} onSubmit={onSubmit} />: <Cargando/>}
     </>
   );
 };
