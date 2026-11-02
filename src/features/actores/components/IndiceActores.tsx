@@ -5,6 +5,7 @@ import Cargando from "../../../components/Cargando";
 import Paginacion from "../../../components/Paginacion";
 import ListadoGenerico from "../../../components/ListadoGenerico";
 import confirmar from "../../../utilidades/confirmar";
+import clienteAPI from "../../../api/clienteAxios";
 
 const IndiceActores = () => {
   const navigate = useNavigate();
@@ -16,7 +17,23 @@ const IndiceActores = () => {
     setPagina,
     setRecordsPorPagina,
     actores,
+    cargarRegistros,
   } = useActores();
+
+  const Borrar = async (id: number) => {
+    try {
+      await clienteAPI.delete(`/actores/${id}`);
+
+      if (pagina === 1) {
+        cargarRegistros();
+      } else {
+        setPagina(1);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <>
       <h3>Actores</h3>
@@ -62,9 +79,9 @@ const IndiceActores = () => {
                       </Boton>
                       <Boton
                         className="btn btn-sm btn-outline-danger me-2"
-                        onClick={() => confirmar(() => {})}
+                        onClick={() => confirmar(() => {Borrar(actor.id)})}
                       >
-                        <i className="bi bi-trash"></i> Editar
+                        <i className="bi bi-trash"></i> Borrar
                       </Boton>
                     </td>
                   </tr>
