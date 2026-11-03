@@ -16,7 +16,7 @@ const EditarActor = () => {
   const [errores, setErrores] = useState<string[]>([]);
 
   useEffect(() => {
-    clienteAPI.get(`/actores/${id}`).then((res) => {
+    clienteAPI.get(`/actor/${id}`).then((res) => {
       const actor = res.data;
 
       const actorCreacion: ActorCreacion = {

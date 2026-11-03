@@ -16,7 +16,7 @@ const CrearActor = () => {
 
   const onSubmit: SubmitHandler<ActorCreacion> = async(data)=>{
   try{
-     await clienteAPI.postForm('/actores',data);
+     await clienteAPI.postForm('/actor',data);
      navigate('/actores');
 
   }catch(error){
