@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Boton from "../../../components/Boton";
 import { NavLink } from "react-router";
 import Mapa from "../../../components/Mapa/Mapa";
+import MostrarErrores from "../../../components/MostrarErrores";
 
 export default function FormularioCine(props: FormularioCineProps) {
   const {
@@ -20,6 +21,7 @@ export default function FormularioCine(props: FormularioCineProps) {
 
   return (
     <>
+      <MostrarErrores errores={props.errores} />
       <form onSubmit={handleSubmit(props.onSubmit)}>
         <div className="form-group">
           <label htmlFor="nombre">Nombre</label>
@@ -33,13 +35,15 @@ export default function FormularioCine(props: FormularioCineProps) {
           {errors.nombre && <p className="error">{errors.nombre.message}</p>}
         </div>
         <div className="mt-4">
-          <Mapa/>
+          <Mapa />
         </div>
         <div className="mt-2">
           <Boton type="submit" disabled={!isValid || isSubmitting}>
             {isSubmitting ? "Enviando" : "Enviar"}
           </Boton>
-          <NavLink to="/cines" className="btn btn-secondary ms-2">Cancelar</NavLink>
+          <NavLink to="/cines" className="btn btn-secondary ms-2">
+            Cancelar
+          </NavLink>
         </div>
       </form>
     </>
@@ -49,6 +53,7 @@ export default function FormularioCine(props: FormularioCineProps) {
 interface FormularioCineProps {
   modelo?: CineCreacion;
   onSubmit: SubmitHandler<CineCreacion>;
+  errores: string[];
 }
 
 const reglasDeValidacion = yup.object({
