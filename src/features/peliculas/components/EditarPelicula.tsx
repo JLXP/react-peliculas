@@ -50,13 +50,14 @@ const EditarPelicula = () => {
       personaje: "Spider man",
       foto: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/TomHolland-byPhilipRomano.jpg/960px-TomHolland-byPhilipRomano.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
     },
-  ]
+  ];
 
   return (
     <>
       <h3>Editar Pelicula</h3>
       {modelo ? (
         <FormularioPelicula
+          errores={[]}
           modelo={modelo}
           onSubmit={onSubmit}
           generosNoSeleccionados={generoNoSeleccionados}
