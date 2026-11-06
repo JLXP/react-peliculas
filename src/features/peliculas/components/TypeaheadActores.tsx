@@ -1,29 +1,23 @@
-import { Typeahead } from "react-bootstrap-typeahead";
+import { AsyncTypeahead } from "react-bootstrap-typeahead";
 import type ActorPelicula from "../models/ActorPelicula.model";
 import type { Option } from "react-bootstrap-typeahead/types/types";
 import { useState } from "react";
+import clienteAPI from "../../../api/clienteAxios";
 
 export default function TypeaheadActores(props: TypeaheadActores) {
-  const actores: ActorPelicula[] = [
-    {
-      id: 1,
-      nombre: "Tom Holland",
-      personaje: "",
-      foto: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/18/TomHolland-byPhilipRomano.jpg/960px-TomHolland-byPhilipRomano.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    },
-    {
-      id: 2,
-      nombre: "Marisa Tomei",
-      personaje: "",
-      foto: "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1b/Marisa_Tomei_Photo_Op_GalaxyCon_Raleigh_2024_%28cropped%29.jpg/960px-Marisa_Tomei_Photo_Op_GalaxyCon_Raleigh_2024_%28cropped%29.jpg?utm_source=es.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    },
-    {
-      id: 3,
-      nombre: "Tom Hanks",
-      personaje: "",
-      foto: "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/39/TomHanksPrincEdw031223_%2811_of_41%29_%28cropped%29.jpg/960px-TomHanksPrincEdw031223_%2811_of_41%29_%28cropped%29.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    },
-  ];
+  
+  const [actores, setActores] = useState<ActorPelicula[]>([]);
+  const [cargando, setCargando] = useState(false);
+
+  function manejarBusqueda(query:string){
+    setCargando(true);
+
+    clienteAPI.get<ActorPelicula[]>(`/actores/${query}`)
+    .then(res=>{
+      setActores(res.data);
+      setCargando(false);
+    })
+  }
 
   const seleccion: ActorPelicula[] = [];
 
@@ -58,14 +52,18 @@ export default function TypeaheadActores(props: TypeaheadActores) {
   return (
     <>
       <label>Actores</label>
-      <Typeahead
+      <AsyncTypeahead
+        isLoading={cargando}
+        onSearch={manejarBusqueda}
         id="typeahead"
         onChange={(actores: Option[]) => {
           const actorSeleccionado = actores[0] as ActorPelicula;
           if (
             props.actores.findIndex((x) => x.id === actorSeleccionado.id) === -1
+            
           ) {
             props.onAdd([...props.actores, actorSeleccionado]);
+            actorSeleccionado.personaje = '';
           }
         }}
         labelKey={(opcion: Option) => {
