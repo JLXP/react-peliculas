@@ -1,39 +1,14 @@
 import { useEffect, useState } from "react";
 import ListadoPeliculas from "../../peliculas/components/ListadoPeliculas";
-import type Pelicula from "../../peliculas/models/Pelicula.model";
+import type LandingPageDTO from "./models/LandingPageDTO";
+import clienteAPI from "../../../api/clienteAxios";
 
 export default function LandingPage() {
-  const [peliculas, setPeliculas] = useState<AppsState>({});
+  const [peliculas, setPeliculas] = useState<LandingPageDTO>({});
 
   useEffect(() => {
-    setTimeout(() => {
-      const enCines: Pelicula[] = [
-        {
-          id: 1,
-          titulo: "Sonic 3",
-          poster:
-            "https://upload.wikimedia.org/wikipedia/en/f/f2/Sonic_the_Hedgehog_3_film_poster.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
-        },
-        {
-          id: 2,
-          titulo: "John Wick: Chapter 4",
-          poster:
-            "https://upload.wikimedia.org/wikipedia/en/d/d0/John_Wick_-_Chapter_4_promotional_poster.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
-        },
-      ];
-
-      const proximosEstrenos: Pelicula[] = [
-        {
-          id: 1,
-          titulo: "Spider-Man: Far From Home",
-          poster:
-            "https://upload.wikimedia.org/wikipedia/en/b/bd/Spider-Man_Far_From_Home_poster.jpg?utm_source=en.wikipedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
-        },
-      ];
-
-      setPeliculas({ enCines, proximosEstrenos });
-    }, 1000);
-  });
+    clienteAPI.get<LandingPageDTO>('/peliculas/landing').then(res=>setPeliculas(res.data));
+  },[]);
   return (
     <>
       <h3>En Cines</h3>
@@ -43,9 +18,4 @@ export default function LandingPage() {
       <ListadoPeliculas peliculas={peliculas.proximosEstrenos} />
     </>
   );
-}
-
-interface AppsState {
-  enCines?: Pelicula[];
-  proximosEstrenos?: Pelicula[];
 }
