@@ -8,7 +8,7 @@ import {
 import { useState } from "react";
 import type Coordenada from "./Coordenadas.model";
 
-export default function Mapa() {
+export default function Mapa(props: MapaProps) {
   const [coordenadas, setCoordenadas] = useState<Coordenada[]>();
 
   return (
@@ -22,8 +22,17 @@ export default function Mapa() {
         attribution="React Peliculas"
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      
+      {props.editable ? <ClickMap
+        setPunto={(coordenada) => {
+          setCoordenadas([coordenada]);
+          if (props.lugarSeleccionado) {
+            props.lugarSeleccionado(coordenada);
+          }
+        }}
+      /> : undefined}
 
-      <ClickMap setPunto={(coordenada) => setCoordenadas([coordenada])} />
+      
 
       {coordenadas?.map((coordenada) => (
         <Marker
@@ -35,6 +44,12 @@ export default function Mapa() {
       ))}
     </MapContainer>
   );
+}
+
+interface MapaProps {
+  lugarSeleccionado?: (coordenada: Coordenada) => void;
+  coordenadas?: Coordenada[];
+  editable: boolean;
 }
 
 function ClickMap(props: ClickMapaProps) {

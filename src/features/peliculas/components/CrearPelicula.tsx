@@ -33,8 +33,8 @@ const CrearPelicula = () => {
   const onSubmit: SubmitHandler<PeliculaCreacion> = async (data) => {
     try {
       const formData = convertirPeliculaCreacionAFormData(data);
-      await clienteAPI.postForm<Pelicula>("/peliculas", formData);
-      navigate("/");
+      const respuesta = await clienteAPI.postForm<Pelicula>("/peliculas", formData);
+      navigate(`/peliculas/${respuesta.data.id}`);
     } catch (err) {
       const errores = extraerErrores(err as AxiosError);
       setErrores(errores);

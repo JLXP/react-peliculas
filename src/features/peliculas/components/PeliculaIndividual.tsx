@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import Boton from "../../../components/Boton";
 import type Pelicula from "../models/Pelicula.model";
 import styles from "./PeliculaIndividual.module.css";
@@ -24,11 +24,11 @@ export default function PeliculaIndividual(props: PeliculaIndividualProps) {
 
   return (
     <div className={styles.div}>
-      <a href={construirLink()}>
+      <NavLink to={construirLink()}>
         <img alt="Poster" src={props.pelicula.poster} />
-      </a>
+      </NavLink>
       <p>
-        <a href={construirLink()}>{props.pelicula.titulo}</a>
+        <NavLink to={construirLink()}>{props.pelicula.titulo}</NavLink>
       </p>
       <div>
         <Boton onClick={() => navigate(`pelicula/editar/${props.pelicula.id}`)}>
