@@ -5,10 +5,20 @@ import { useEffect, useState } from "react";
 import type Pelicula from "../models/Pelicula.model";
 import clienteAPI from "../../../api/clienteAxios";
 import ListadoPeliculas from "./ListadoPeliculas";
+import { useSearchParams } from "react-router";
+import Paginacion from "../../../components/Paginacion";
 
 const FiltrarPeliculas = () => {
   const [generos, setGeneros] = useState<Genero[]>([]);
   const [peliculas, setPeliculas] = useState<Pelicula[]>();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [pagina, setPagina] = useState(
+    searchParams.has("pagina") ? parseInt(searchParams.get("pagina")!, 10) : 1,
+  );
+  const [recordsPorPagina, setRecordsPorPagina] = useState(
+    searchParams.has("recordsPorPagina") ? parseInt(searchParams.get("recordsPorPagina")!, 10) : 2,
+  );
+  const [cantidadTotalRegistros, setCantidadTotalRegistros] = useState(0);
 
   useEffect(() => {
     clienteAPI
@@ -16,34 +26,64 @@ const FiltrarPeliculas = () => {
       .then((res) => setGeneros(res.data));
   }, []);
 
-  
   useEffect(() => {
+    if (generos.length == 0) {
+      return;
+    }
+
+    console.log("use effect buscar peliculas");
+
+    if (searchParams.has("titulo")) {
+      valorInicial.titulo = searchParams.get("titulo")!;
+      setValue("titulo", valorInicial.titulo);
+    }
+
+    if (searchParams.has("generoId")) {
+      valorInicial.generoId = parseInt(searchParams.get("generoId")!, 10);
+      setValue("generoId", valorInicial.generoId);
+    }
+
+    if (searchParams.has("enCines")) {
+      valorInicial.enCines = Boolean(searchParams.get("enCines"));
+      setValue("enCines", valorInicial.proximosEstrenos);
+    }
+
+    if (searchParams.has("proximosEstrenos")) {
+      valorInicial.enCines = Boolean(searchParams.get("proximosEstrenos"));
+      setValue("proximosEstrenos", valorInicial.proximosEstrenos);
+    }
+
     buscarPeliculas(valorInicial);
-  }, [generos]);
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [generos, pagina, recordsPorPagina]);
 
-
-  function modificarURL(valores: FormType){
+  function modificarURL(valores: FormType) {
     const params = new URLSearchParams();
 
-
-    if(valores.titulo){
-      params.set('titulo', valores.titulo);
+    if (valores.titulo) {
+      params.set("titulo", valores.titulo);
     }
 
-    if(valores.generoId){
-      params.set('generoId', String(valores.generoId));
+    if (valores.generoId) {
+      params.set("generoId", String(valores.generoId));
     }
 
-    if(valores.enCines){
-      params.set('enCines', String(valores.enCines));
+    if (valores.enCines) {
+      params.set("enCines", String(valores.enCines));
     }
 
-    if(valores.proximosEstrenos){
-      params.set('proximosEstrenos', String(valores.proximosEstrenos));
+    if (valores.proximosEstrenos) {
+      params.set("proximosEstrenos", String(valores.proximosEstrenos));
     }
+
+    params.set("pagina", String(pagina));
+    params.set("recordsPorPagina", String(recordsPorPagina));
+
+    setSearchParams(params);
   }
 
-const valorInicial: FormType = {
+  const valorInicial: FormType = {
     titulo: "",
     generoId: 0,
     proximosEstrenos: false,
@@ -51,22 +91,27 @@ const valorInicial: FormType = {
   };
 
   async function buscarPeliculas(valores: FormType) {
+    modificarURL(valores);
     try {
       const respuesta = await clienteAPI.get<Pelicula[]>("/peliculas/filtrar", {
-        params: valores,
+        params: { ...valores, pagina, recordsPorPagina },
       });
+      const cantidadTotalRegistros = parseInt(
+        respuesta.headers["cantidad-total-registros"],
+        10,
+      );
+      setCantidadTotalRegistros(cantidadTotalRegistros);
       setPeliculas(respuesta.data);
     } catch (err) {
       console.error(err);
     }
   }
 
-  
-
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { isSubmitting },
   } = useForm<FormType>({
     defaultValues: valorInicial,
@@ -128,11 +173,30 @@ const valorInicial: FormType = {
           <Boton disabled={isSubmitting} type="submit">
             {isSubmitting ? "Filtrando..." : "Filtrar"}
           </Boton>
-          <Boton onClick={() => reset()} className="btn btn-danger ms-2">
+          <Boton
+            onClick={() => {
+              reset();
+              buscarPeliculas(valorInicial);
+            }}
+            className="btn btn-danger ms-2"
+          >
             Limpiar
           </Boton>
         </div>
       </form>
+
+      <div className="mt-4">
+        <Paginacion
+          paginaActual={pagina}
+          registrosPorPagina={recordsPorPagina}
+          cantidadTotalRegistros={cantidadTotalRegistros}
+          registrosPorPaginaOpciones={[2, 10, 50]}
+          onCambioPaginacion={(pagina, recordosPorPagina) => {
+            setPagina(pagina);
+            setRecordsPorPagina(recordosPorPagina);
+          }}
+        />
+      </div>
 
       <div className="mt-4">
         <ListadoPeliculas peliculas={peliculas} />
