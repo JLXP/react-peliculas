@@ -1,5 +1,5 @@
 import React from "react";
-import type Claim from "../components/models/Claim";
+import type Claim from "../models/Claim";
 
 const AutenticacionContext = React.createContext<AutenticacionContextParams>({
   claims: [],

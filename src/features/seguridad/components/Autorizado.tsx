@@ -2,7 +2,7 @@ import type React from "react";
 import { useContext, useEffect, useState } from "react";
 import AutenticacionContext from "../utilidades/AutenticacionContext";
 
-export default function Autroziado(props: AutorizadoProps) {
+export default function Autorizado(props: AutorizadoProps) {
   const [autorizado, setAutorizado] = useState(false);
   const { claims } = useContext(AutenticacionContext);
 
@@ -28,6 +28,6 @@ export default function Autroziado(props: AutorizadoProps) {
 
 interface AutorizadoProps {
   autorizado: React.ReactNode;
-  noAutorizado: React.ReactNode;
+  noAutorizado?: React.ReactNode;
   claims?: string[];
 }

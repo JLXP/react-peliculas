@@ -6,6 +6,7 @@ import confirmar from "../../../utilidades/confirmar";
 import clienteAPI from "../../../api/clienteAxios";
 import { useContext } from "react";
 import AlertaContext from "../../../utilidades/alertaContext";
+import Autorizado from "../../seguridad/components/Autorizado";
 
 export default function PeliculaIndividual(props: PeliculaIndividualProps) {
   const construirLink = () => `/pelicula/${props.pelicula.id}`;
@@ -16,7 +17,6 @@ export default function PeliculaIndividual(props: PeliculaIndividualProps) {
     try {
       await clienteAPI.delete(`/peliculas/${id}`);
       alerta();
-
     } catch (err) {
       console.error(err);
     }
@@ -30,17 +30,31 @@ export default function PeliculaIndividual(props: PeliculaIndividualProps) {
       <p>
         <NavLink to={construirLink()}>{props.pelicula.titulo}</NavLink>
       </p>
-      <div>
-        <Boton onClick={() => navigate(`pelicula/editar/${props.pelicula.id}`)}>
-          Editar
-        </Boton>
-        <Boton
-          className="btn btn-danger ms-4"
-          onClick={() => confirmar(() => {borrar(props.pelicula.id)})}
-        >
-          Borrar
-        </Boton>
-      </div>
+
+      <Autorizado
+        claims={['esadmins']}
+        autorizado={
+          <>
+            <div>
+              <Boton
+                onClick={() => navigate(`pelicula/editar/${props.pelicula.id}`)}
+              >
+                Editar
+              </Boton>
+              <Boton
+                className="btn btn-danger ms-4"
+                onClick={() =>
+                  confirmar(() => {
+                    borrar(props.pelicula.id);
+                  })
+                }
+              >
+                Borrar
+              </Boton>
+            </div>
+          </>
+        }
+      />
     </div>
   );
 }
