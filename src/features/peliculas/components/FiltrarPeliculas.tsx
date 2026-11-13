@@ -1,111 +1,18 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import Boton from "../../../components/Boton";
-import type Genero from "../../generos/models/Genero.model";
-import { useEffect, useState } from "react";
-import type Pelicula from "../models/Pelicula.model";
-import clienteAPI from "../../../api/clienteAxios";
 import ListadoPeliculas from "./ListadoPeliculas";
-import { useSearchParams } from "react-router";
 import Paginacion from "../../../components/Paginacion";
+import type PeliculasFiltrarDTO from "../models/PeliculasFiltrar.model";
+import useFiltroPelicula from "../hooks/useFiltroPelicula";
 
 const FiltrarPeliculas = () => {
-  const [generos, setGeneros] = useState<Genero[]>([]);
-  const [peliculas, setPeliculas] = useState<Pelicula[]>();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [pagina, setPagina] = useState(
-    searchParams.has("pagina") ? parseInt(searchParams.get("pagina")!, 10) : 1,
-  );
-  const [recordsPorPagina, setRecordsPorPagina] = useState(
-    searchParams.has("recordsPorPagina") ? parseInt(searchParams.get("recordsPorPagina")!, 10) : 2,
-  );
-  const [cantidadTotalRegistros, setCantidadTotalRegistros] = useState(0);
 
-  useEffect(() => {
-    clienteAPI
-      .get<Genero[]>("/generos/todos")
-      .then((res) => setGeneros(res.data));
-  }, []);
-
-  useEffect(() => {
-    if (generos.length == 0) {
-      return;
-    }
-
-    console.log("use effect buscar peliculas");
-
-    if (searchParams.has("titulo")) {
-      valorInicial.titulo = searchParams.get("titulo")!;
-      setValue("titulo", valorInicial.titulo);
-    }
-
-    if (searchParams.has("generoId")) {
-      valorInicial.generoId = parseInt(searchParams.get("generoId")!, 10);
-      setValue("generoId", valorInicial.generoId);
-    }
-
-    if (searchParams.has("enCines")) {
-      valorInicial.enCines = Boolean(searchParams.get("enCines"));
-      setValue("enCines", valorInicial.proximosEstrenos);
-    }
-
-    if (searchParams.has("proximosEstrenos")) {
-      valorInicial.enCines = Boolean(searchParams.get("proximosEstrenos"));
-      setValue("proximosEstrenos", valorInicial.proximosEstrenos);
-    }
-
-    buscarPeliculas(valorInicial);
-    
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [generos, pagina, recordsPorPagina]);
-
-  function modificarURL(valores: FormType) {
-    const params = new URLSearchParams();
-
-    if (valores.titulo) {
-      params.set("titulo", valores.titulo);
-    }
-
-    if (valores.generoId) {
-      params.set("generoId", String(valores.generoId));
-    }
-
-    if (valores.enCines) {
-      params.set("enCines", String(valores.enCines));
-    }
-
-    if (valores.proximosEstrenos) {
-      params.set("proximosEstrenos", String(valores.proximosEstrenos));
-    }
-
-    params.set("pagina", String(pagina));
-    params.set("recordsPorPagina", String(recordsPorPagina));
-
-    setSearchParams(params);
-  }
-
-  const valorInicial: FormType = {
-    titulo: "",
-    generoId: 0,
-    proximosEstrenos: false,
-    enCines: false,
-  };
-
-  async function buscarPeliculas(valores: FormType) {
-    modificarURL(valores);
-    try {
-      const respuesta = await clienteAPI.get<Pelicula[]>("/peliculas/filtrar", {
-        params: { ...valores, pagina, recordsPorPagina },
-      });
-      const cantidadTotalRegistros = parseInt(
-        respuesta.headers["cantidad-total-registros"],
-        10,
-      );
-      setCantidadTotalRegistros(cantidadTotalRegistros);
-      setPeliculas(respuesta.data);
-    } catch (err) {
-      console.error(err);
-    }
-  }
+  const valorInicial: PeliculasFiltrarDTO = {
+          titulo: "",
+          generoId: 0,
+          proximosEstrenos: false,
+          enCines: false,
+        };
 
   const {
     register,
@@ -113,13 +20,15 @@ const FiltrarPeliculas = () => {
     reset,
     setValue,
     formState: { isSubmitting },
-  } = useForm<FormType>({
+  } = useForm<PeliculasFiltrarDTO>({
     defaultValues: valorInicial,
   });
 
-  const onSubmit: SubmitHandler<FormType> = async (data) => {
+  const onSubmit: SubmitHandler<PeliculasFiltrarDTO> = async (data) => {
     await buscarPeliculas(data);
   };
+
+  const {buscarPeliculas, generos, pagina, recordsPorPagina, cantidadTotalRegistros, setPagina, setRecordsPorPagina, peliculas} = useFiltroPelicula(valorInicial,setValue);
 
   return (
     <>
@@ -206,9 +115,3 @@ const FiltrarPeliculas = () => {
 };
 export default FiltrarPeliculas;
 
-interface FormType {
-  titulo: string;
-  generoId: number;
-  proximosEstrenos: boolean;
-  enCines: boolean;
-}
