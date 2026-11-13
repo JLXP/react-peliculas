@@ -1,14 +1,67 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import Boton from "../../../components/Boton";
 import type Genero from "../../generos/models/Genero.model";
+import { useEffect, useState } from "react";
+import type Pelicula from "../models/Pelicula.model";
+import clienteAPI from "../../../api/clienteAxios";
+import ListadoPeliculas from "./ListadoPeliculas";
 
 const FiltrarPeliculas = () => {
-  const valorInicial: FormType = {
+  const [generos, setGeneros] = useState<Genero[]>([]);
+  const [peliculas, setPeliculas] = useState<Pelicula[]>();
+
+  useEffect(() => {
+    clienteAPI
+      .get<Genero[]>("/generos/todos")
+      .then((res) => setGeneros(res.data));
+  }, []);
+
+  
+  useEffect(() => {
+    buscarPeliculas(valorInicial);
+  }, [generos]);
+
+
+  function modificarURL(valores: FormType){
+    const params = new URLSearchParams();
+
+
+    if(valores.titulo){
+      params.set('titulo', valores.titulo);
+    }
+
+    if(valores.generoId){
+      params.set('generoId', String(valores.generoId));
+    }
+
+    if(valores.enCines){
+      params.set('enCines', String(valores.enCines));
+    }
+
+    if(valores.proximosEstrenos){
+      params.set('proximosEstrenos', String(valores.proximosEstrenos));
+    }
+  }
+
+const valorInicial: FormType = {
     titulo: "",
     generoId: 0,
     proximosEstrenos: false,
     enCines: false,
   };
+
+  async function buscarPeliculas(valores: FormType) {
+    try {
+      const respuesta = await clienteAPI.get<Pelicula[]>("/peliculas/filtrar", {
+        params: valores,
+      });
+      setPeliculas(respuesta.data);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  
 
   const {
     register,
@@ -19,15 +72,8 @@ const FiltrarPeliculas = () => {
     defaultValues: valorInicial,
   });
 
-  const generos: Genero[] = [
-    { id: 1, nombre: "Accion" },
-    { id: 2, nombre: "Comedia" },
-  ];
-
   const onSubmit: SubmitHandler<FormType> = async (data) => {
-    console.log("filtrando...");
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log(data);
+    await buscarPeliculas(data);
   };
 
   return (
@@ -87,6 +133,10 @@ const FiltrarPeliculas = () => {
           </Boton>
         </div>
       </form>
+
+      <div className="mt-4">
+        <ListadoPeliculas peliculas={peliculas} />
+      </div>
     </>
   );
 };
