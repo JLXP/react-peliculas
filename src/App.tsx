@@ -2,13 +2,16 @@ import { BrowserRouter } from "react-router";
 import Menu from "./components/Menu";
 import AppRoutes from "./AppRoutes";
 import AutenticacionContext from "./features/seguridad/utilidades/AutenticacionContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type Claim from "./features/seguridad/models/Claim";
+import { obtenerClaims } from "./features/seguridad/utilidades/ManejadorJWT";
 
 export default function App() {
-  const [claims, setClaims] = useState<Claim[]>([
-    { nombre: "esadmind", valor: 'true' },
-  ]);
+  const [claims, setClaims] = useState<Claim[]>([]);
+
+  useEffect(() => {
+    setClaims(obtenerClaims());
+  }, []);
 
   function actualizar(claims: Claim[]) {
     setClaims(claims);
