@@ -15,12 +15,16 @@ import RutaNoEncontrada from "./components/RutaNoEncontrada";
 import FiltrarPeliculas from "./features/peliculas/components/FiltrarPeliculas";
 import DetallePelicula from "./features/peliculas/components/DetallePelicula";
 import RutaProtegida from "./features/seguridad/components/RutaProtegida";
+import Registro from "./features/seguridad/components/Registro";
+import Login from "./features/seguridad/components/Login";
 
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route element={<RutaProtegida claims={['esadmin']}/>}>
-        <Route path="/" element={<LandingPage />} />
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/registro" element={<Registro />} />
+      <Route path="/login" element={<Login />} />
+      <Route element={<RutaProtegida claims={["esadmin"]} />}>
         <Route path="/generos" element={<IndiceGeneros />} />
         <Route path="/generos/crear" element={<CrearGenero />} />
         <Route path="/generos/editar/:id" element={<EditarGenero />} />
