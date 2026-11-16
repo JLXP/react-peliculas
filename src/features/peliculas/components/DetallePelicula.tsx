@@ -5,6 +5,9 @@ import clienteAPI from "../../../api/clienteAxios";
 import Cargando from "../../../components/Cargando";
 import type Coordenada from "../../../components/Mapa/Coordenadas.model";
 import Mapa from "../../../components/Mapa/Mapa";
+import Rating from "../../../components/Rating/Rating";
+import type RatingCreacion from "../../../components/Rating/RatingCreacion.model";
+import Swal from "sweetalert2";
 
 export default function DetallePelicula() {
   const { id } = useParams();
@@ -41,6 +44,13 @@ export default function DetallePelicula() {
     });
   }
 
+
+  function manejarVoto(voto: number){
+    const data: RatingCreacion={peliculaId:Number(id), puntuacion: voto};
+    clienteAPI.post('/rating', data).then(()=>Swal.fire({icon:'success', title:'Voto recibido'}));
+  }
+
+
   return (
     <>
       <div className="container my-4">
@@ -59,7 +69,15 @@ export default function DetallePelicula() {
             </div>
           )}
 
-          <p className="text-muted"> Estreno: {fechaFormateada}</p>
+          <p className="text-muted">
+            {" "}
+            Estreno: {fechaFormateada} | Mi rating{" "}
+            <Rating
+              maximoValor={5}
+              valorSeleccionado={pelicula.votoUsuario}
+              onChange={(voto) => manejarVoto(voto)}
+            />
+          </p>
         </div>
         <div className="d-flex">
           <span className="d-inline-block me-2">
@@ -78,35 +96,33 @@ export default function DetallePelicula() {
             />
           </div>
         </div>
-        {pelicula.actores &&
-          pelicula.actores.length >
-            0 && (
-              <div>
-                <h4>Actores</h4>
-                <div className="row">
-                  {pelicula.actores.map((actor) => (
-                    <div key={actor.id} className="col-md-4 d-flex mb-3">
-                      <img
-                        src={actor.foto}
-                        alt={actor.nombre}
-                        className="rounded me-3"
-                        style={{ width: "80px", height: "100px" }}
-                      />
-                      <div>
-                        <strong>{actor.nombre}</strong>
-                        <br />
-                        <span className="text-muted">{actor.personaje}</span>
-                      </div>
-                    </div>
-                  ))}
+        {pelicula.actores && pelicula.actores.length > 0 && (
+          <div>
+            <h4>Actores</h4>
+            <div className="row">
+              {pelicula.actores.map((actor) => (
+                <div key={actor.id} className="col-md-4 d-flex mb-3">
+                  <img
+                    src={actor.foto}
+                    alt={actor.nombre}
+                    className="rounded me-3"
+                    style={{ width: "80px", height: "100px" }}
+                  />
+                  <div>
+                    <strong>{actor.nombre}</strong>
+                    <br />
+                    <span className="text-muted">{actor.personaje}</span>
+                  </div>
                 </div>
-              </div>
-            )}
+              ))}
+            </div>
+          </div>
+        )}
 
         {pelicula.cines && pelicula.cines.length > 0 && (
           <div className="w-100">
             <h2>Mostrandose en los siguientes cines</h2>
-            <Mapa coordenadas={transformarCoordenadas()} editable={false}/>
+            <Mapa coordenadas={transformarCoordenadas()} editable={false} />
           </div>
         )}
       </div>
