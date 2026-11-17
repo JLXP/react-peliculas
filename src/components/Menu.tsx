@@ -50,6 +50,11 @@ export default function Menu() {
                       Crear Pelicula
                     </NavLink>
                   </li>
+                  <li className="nav-item">
+                    <NavLink to="/usuarios" className="nav-link">
+                      Usuarios
+                    </NavLink>
+                  </li>
                 </>
               }
             />

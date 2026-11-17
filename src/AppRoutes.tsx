@@ -17,6 +17,7 @@ import DetallePelicula from "./features/peliculas/components/DetallePelicula";
 import RutaProtegida from "./features/seguridad/components/RutaProtegida";
 import Registro from "./features/seguridad/components/Registro";
 import Login from "./features/seguridad/components/Login";
+import IndiceUsuarios from "./features/seguridad/components/IndiceUsuarios";
 
 export default function AppRoutes() {
   return (
@@ -24,6 +25,7 @@ export default function AppRoutes() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/registro" element={<Registro />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/usuarios" element={<IndiceUsuarios />} />
       <Route element={<RutaProtegida claims={["esadmin"]} />}>
         <Route path="/generos" element={<IndiceGeneros />} />
         <Route path="/generos/crear" element={<CrearGenero />} />
